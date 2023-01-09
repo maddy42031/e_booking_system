@@ -1,0 +1,60 @@
+body {
+  height: 100vh;
+}
+.section {
+  height: 100%;
+}
+.section:nth-child(1) {
+  background-color: rgb(188, 219, 225);
+}
+.text-color{
+  color: rgb(7, 30, 62);
+}
+.nav-link:hover{
+  color: rgb(56, 88, 118);
+  text-decoration: underline;
+}
+
+.logo{
+  font-family: 'Belleza', sans-serif;
+  font-size: 10vw;
+  font-weight: 900;
+}
+.button{
+  border: 1px solid rgb(7, 30, 62);
+  outline: none;
+  border-radius: 5px;
+  background-color: aliceblue;
+  padding: 1rem 5rem;
+  transition: border 0.5s;
+}
+.button>a{
+  text-decoration: none;
+}
+.button>a:hover{
+  color: rgb(7, 30, 62);
+}
+.button:hover{
+  border: 1px solid aliceblue;
+}
+
+.down{
+  width: 1.5rem;
+  height: 1.5rem;
+  border-bottom: 1px solid rgb(7, 30, 62);
+  border-right:1px solid rgb(7, 30, 62);
+  transform: rotate(45deg);
+  animation: scroll-down;
+  animation-timing-function: linear;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+}
+@keyframes scroll-down {
+  0%{
+    margin-top: 0rem;
+  }50%{
+    margin-top: 1.5rem;
+  }100%{
+    margin-top: 0rem;
+  }
+}

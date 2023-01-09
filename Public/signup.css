@@ -1,0 +1,15 @@
+body {
+  height: 100vh;
+}
+.section {
+  height: 100%;
+}
+.br {
+  border: 1px solid rgb(196, 202, 206);
+  border-radius: 5px;
+}
+.sign-header {
+  color: rgb(7, 30, 62);
+  font-family: "Belleza", sans-serif;
+  font-weight: 800;
+}
