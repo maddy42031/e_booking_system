@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import OrderSummary, { Table } from "../OrderSummary/OrderSummary";
 function parseBookingDetails(BookingData) {
-  console.log(BookingData);
   const Bookedfilter = BookingData.filter((data) => data.isBooked === true).map(
     (data) => {
       return {
@@ -10,7 +9,7 @@ function parseBookingDetails(BookingData) {
         checkin: data.checkin,
         checkout: data.checkout,
         roomType: data.roomType,
-        room_isActive: data.isActive ? "YES" : "NO",
+        active_rooms: data.isActive ? "YES" : "NO",
         cancel_Rooms: "btn", // this attribute for only to use table heading purpose.
         password: { pswd: data.password },
         price: data.price,
@@ -90,7 +89,7 @@ function Booking() {
   };
 
   return (
-    <div className="container mt-4">
+    <div className="container-fluid mt-4">
       {loader ? (
         <div className="text-center mt-5">
           <div

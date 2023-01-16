@@ -53,7 +53,13 @@ signup.post("/", function (req, res) {
   isExistUser(req, res)
     .then((val) => {
       if (val) {
-        res.sendFile(path.resolve(paths, "SignUpPage/error.html"));
+        res.render("error",{
+          title:"User Exists",
+          heading:'ERROR 403 FOUND !',
+          content:'Email has been already taken.',
+          backTo:"/signup",
+          backToContent:"Back To SignUp"
+        })
       } else {
         createUser(req).then((cryptoCookie) => {
           const cookie = jwt.sign(

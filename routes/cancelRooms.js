@@ -19,6 +19,7 @@ async function cancelRoomsDatas(userId, roomsNo) {
           price:0,
           password:0,
           isBooked:false,
+          isActive:false,
         },
       };
       await user.updateOne(roomFilter, updateRoomDoc);

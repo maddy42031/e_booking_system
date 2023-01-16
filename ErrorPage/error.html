@@ -15,19 +15,19 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/Public/signup.css" />
-    <title>ERROR</title>
+    <title><%=title%></title>
   </head>
   <body>
     <div class="container">
       <div class="row row-cols-1">
         <div class="col mt-5">
-            <div class="h1 text-danger">ERROR 404 FOUND !</div>
+            <div class="h1 text-danger"><%=heading%></div>
         </div>
-        <div class="col mt-3">
-          <div class="h2">No page at this url.</div>
-          <div class="h6">
-            <a href="/" target="_self" rel="noopener noreferrer"
-              >Back to Home Page</a
+        <div class="col ">
+          <div class="h2"><%=content%></div>
+          <div class="h6 mt-4">
+            <a href=<%=backTo%> target="_self" rel="noopener noreferrer"
+              ><%=backToContent%></a
             >
           </div>
         </div>

@@ -36,9 +36,13 @@ login.post("/", function (req, res) {
         .cookie("userId", val.data.userID)
         .redirect("/dashboard");
     } else {
-      res.send(
-        `<p>No user at this email and phone number</p><a href="/login">Back to login</a>`
-      );
+      res.render("error",{
+        title:"Not Found",
+        heading:'ERROR 403 FOUND !',
+        content:'No user at this email or password wrong .',
+        backTo:"/login",
+        backToContent:"Back To Login"
+      })
     }
   });
 });

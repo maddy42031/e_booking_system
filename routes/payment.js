@@ -8,7 +8,8 @@ async function Payment(details) {
     for (let i = 0; i < 5; i++) {
       pswdNumber += String(Math.floor(Math.random() * 9 - 0) + 0);
     }
-    return Number(pswdNumber + no);
+    console.log(pswdNumber.concat(no));
+    return Number(pswdNumber.concat(no));
   }
 
   try {

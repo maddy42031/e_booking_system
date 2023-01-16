@@ -120,7 +120,14 @@ export function Table({ roomDetail }) {
                   if (values == "YES") {
                     return (
                       <td key={iVal} className="text-success fw-bold">
-                        {String(values).toUpperCase()}
+                        <button
+                          onClick={(e) =>
+                            cancelRoom(e, roomDetail[index], index)
+                          }
+                          className="btn btn-info"
+                        >
+                          ACTIVATE ROOM 
+                        </button>
                       </td>
                     );
                   }
@@ -139,67 +146,3 @@ export function Table({ roomDetail }) {
   );
 }
 export default OrderSummary;
-
-// const [price, setPrice] = useState(function () {
-//   return roomDetail?.flatMap((a) => a.price).reduce((a, b) => a + b);
-// });
-
-// const cancelRoom = (e, ClassName, room) => {
-//   e.target.disabled = true;
-//   axios
-//     .put("/cancelrooms", { roomNo: [room.roomNo] })
-//     .then((val) => {
-//       setRoom((prev) => {
-//         return prev.splice(room, 1);
-//       });
-//       setPrice(function () {
-//         return roomDetail?.flatMap((a) => a.price).reduce((a, b) => a + b);
-//       });
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     });
-// };
-// return (
-//   <table className="table-bordered table table-striped table-hover">
-//     <thead>
-//       <tr>
-//         <th scope="col">NO</th>
-//         {Object.keys(roomDetail[0])?.map((data, i) => (
-//           <th scope="col" key={i}>
-//             {data.toUpperCase()}
-//           </th>
-//         ))}
-//       </tr>
-//     </thead>
-//     <tbody className="headTable">
-//       {roomDetail?.map((val, index) => {
-//         return (
-//           <tr className={`cancelRow${index}`} key={index}>
-//             <th scope="row">{index + 1}</th>
-//             {Object.values(val).map((values, iVal) => {
-//               if (values == "btn") {
-//                 return (
-//                   <td key={iVal}>
-//                     <button
-//                       onClick={(e) => cancelRoom(e, index, roomDetail[index])}
-//                       className="btn btn-danger"
-//                     >
-//                       CANCEL ROOM
-//                     </button>
-//                   </td>
-//                 );
-//               }
-//               return <td key={iVal}>{String(values).toUpperCase()}</td>;
-//             })}
-//           </tr>
-//         );
-//       })}
-//       <tr>
-//         <td colSpan={Object.keys(roomDetail[0]).length - 1}>TOTAL</td>
-//         <td>{price} Rs</td>
-//       </tr>
-//       {console.log(price)}
-//     </tbody>
-//   </table>
-// );

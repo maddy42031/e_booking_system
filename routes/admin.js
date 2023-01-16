@@ -1,20 +1,20 @@
 const express = require("express");
 const admin = express.Router();
-const jwt = require("jsonwebtoken");
 const DB = require("./mongodb");
-const paths = require("./path");
-const path = require("path");
 
 async function activateRooms(uid) {
   const client = DB();
   try {
+    console.log(uid);
     const database = client.db("Myusers");
     const user = database.collection("rooms");
     const query = {
-      userID: uid,
+      id: uid,
     };
     const doc = await user.updateMany(query, {
-      isActive: true,
+      $set: {
+        activateRoom: true,
+      },
     });
     console.log(doc.modifiedCount);
   } catch (error) {
@@ -49,14 +49,20 @@ async function isExistUser(req, res) {
 admin.post("/", function (req, res) {
   isExistUser(req, res).then((val) => {
     if (val.isExist) {
-      res
-        .cookie("token", "abcd", { path: "/user-rooms" })
-        .redirect("/user-rooms");
-      // activateRooms(val.data.userID).then(()=>{
-      //   res.redirect('')
-      // })
+      // res
+      //   .cookie("token", "abcd", { path: "/user-rooms" })
+      //   .redirect("/user-rooms");
+      activateRooms(val.data.userID).then(() => {
+        res.send("Room has been activated !");
+      });
     } else {
-      res.sendFile(path.resolve(paths, "Admin/error.html"));
+      res.render("error",{
+        title:"Not Found",
+        heading:'ERROR 403 FOUND !',
+        content:'No user at this email .',
+        backTo:"/admin",
+        backToContent:"Back To AdminPage"
+      })
     }
   });
 });

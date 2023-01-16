@@ -14,9 +14,10 @@ const userDetails = require("./routes/userDetails");
 const payment = require("./routes/payment");
 const bodyParser = require("body-parser");
 const admin = require("./routes/admin");
+const activateRoom = require("./routes/activateRoom");
 const { MongoClient } = require("mongodb");
-
 const DB = require("./routes/mongodb");
+
 // coming traditional HTML form submits
 app.use(express.urlencoded({ extended: true }));
 
@@ -25,10 +26,19 @@ app.use(
   "/dashboard.js",
   express.static(path.resolve(__dirname, "Dashboard/Production/dashboard.js"))
 );
+app.use(
+  "/user-rooms.js",
+  express.static(path.resolve(__dirname, "user-rooms/production/user-rooms.js"))
+);
 // Serving css files
 app.use("/public", express.static(path.resolve(__dirname, "Public")));
 // Serving image files
 app.use("/images", express.static(path.resolve(__dirname, "images")));
+
+// Setting view engine EJS
+app.engine(".html", require("ejs").__express);
+app.set("view engine", "html");
+app.set("views", path.join(__dirname, "ErrorPage"));
 
 // Serving HTML files
 app.use(
@@ -44,10 +54,6 @@ app.use(
   "/user-rooms",
   express.static(path.resolve(__dirname, "user-rooms/index.html"))
 );
-
-app.get("*", function (req, res) {
-  res.sendFile(path.resolve(__dirname, "ErrorPage/error.html"));
-});
 
 // parse incoming  payloads
 app.use(bodyParser.json());
@@ -65,8 +71,21 @@ app.use("/booking", booking);
 app.use("/date", dateTime);
 app.use("/user-details", userDetails);
 app.use("/payment", payment);
-app.use("/checkuser", admin);
-
+app.use("/activate-rooms", admin);
+app.use("/user-rooms", function (req, res) {
+  res.sendFile(path.resolve(__dirname, "user-rooms/production/index.html"));
+});
+app.use("/activateRoom", activateRoom);
+// Error page
+app.use((req, res, next) => {
+  res.status(404).render("error", {
+    title: "Not Found",
+    heading: "ERROR 404 FOUND !",
+    content: "No page at this url.",
+    backTo: "/",
+    backToContent: "Back To HomePage",
+  });
+});
 async function run() {
   const client = DB();
   try {
@@ -86,6 +105,7 @@ async function run() {
         isBooked: false,
         isPending: false,
         price: 0,
+        activateRoom: false,
       };
       const setDoc = await col.insertOne(doc);
       console.log(setDoc);
