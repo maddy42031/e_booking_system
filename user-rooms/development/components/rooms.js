@@ -91,7 +91,7 @@ function FormPSWD({ NO, BackToRoom }) {
           err.innerHTML = `OK`;
           e.target[1].disabled = false;
           e.target[2].disabled = false;
-        } else if (!IS_ALL_OK.forRoom) {
+        } else if (!IS_ALL_OK.forRoom) { // this is for checking git branch
           err.classList.add("text-danger");
           err.innerHTML = `😶 THIS ROOM IS NOT ACTIVATED`;
           e.target[1].disabled = false;
