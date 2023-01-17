@@ -15,6 +15,8 @@ const payment = require("./routes/payment");
 const bodyParser = require("body-parser");
 const admin = require("./routes/admin");
 const activateRoom = require("./routes/activateRoom");
+const ActiveRoom = require('./routes/ActiveRoom');
+const DisActiveRoom = require('./routes/DisActiveRoom');
 const { MongoClient } = require("mongodb");
 const DB = require("./routes/mongodb");
 
@@ -75,7 +77,9 @@ app.use("/activate-rooms", admin);
 app.use("/user-rooms", function (req, res) {
   res.sendFile(path.resolve(__dirname, "user-rooms/production/index.html"));
 });
-app.use("/activateRoom", activateRoom);
+app.use("/", activateRoom);
+app.use("/active",ActiveRoom);
+app.use("/disactive",DisActiveRoom)
 // Error page
 app.use((req, res, next) => {
   res.status(404).render("error", {
@@ -106,6 +110,7 @@ async function run() {
         isPending: false,
         price: 0,
         activateRoom: false,
+        pswdActive:false,
       };
       const setDoc = await col.insertOne(doc);
       console.log(setDoc);

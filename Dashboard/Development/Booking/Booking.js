@@ -9,7 +9,13 @@ function parseBookingDetails(BookingData) {
         checkin: data.checkin,
         checkout: data.checkout,
         roomType: data.roomType,
-        active_rooms: data.isActive ? "YES" : "NO",
+        active_rooms:
+          data.isActive || data.pswdActive
+            ? {
+                name: data.isActive ? "ACTIVE" : "DISACTIVE",
+                isOpen: "YES",
+              }
+            : "NO",
         cancel_Rooms: "btn", // this attribute for only to use table heading purpose.
         password: { pswd: data.password },
         price: data.price,
@@ -44,30 +50,40 @@ function Booking() {
   const [bookedRoom, setBookedRoom] = useState(false);
   const [loader, setLoader] = useState(true);
   const [pendingRooms, setPendingRooms] = useState();
-  const [noRooms, setNoRooms] = useState(false);
+  const [noRooms, setNoRooms] = useState({
+    bool:false,
+    message:"",
+  });
   const [orderSummary, setOrderSummary] = useState(false);
   const [changer, setChanger] = useState(true);
   useEffect(() => {
-    try {
-      axios.get("/booking").then((value) => {
-        if (value.data) {
-          setLoader(false);
-          const [isBookedRoom, isPendingRoom] = parseBookingDetails(value.data);
-          if (isPendingRoom) {
-            setPendingRooms(isPendingRoom);
-            setPending(isPendingRoom);
-          }
-          if (isBookedRoom) {
-            setBookedRoom(isBookedRoom);
-          }
-        } else {
-          setNoRooms(true);
-          setLoader(false);
+    axios.get("/booking").then((value) => {
+      if (value.data) {
+        setLoader(false);
+        const [isBookedRoom, isPendingRoom] = parseBookingDetails(value.data);
+        if (isPendingRoom) {
+          setPendingRooms(isPendingRoom);
+          setPending(isPendingRoom);
         }
+        if (isBookedRoom) {
+          setBookedRoom(isBookedRoom);
+        }
+      } else {
+        setNoRooms({
+          bool:true,
+          message:"No rooms booked yet !"
+        });
+        setLoader(false);
+      }
+    }).catch(()=>{
+      setLoader(false);
+      setNoRooms({
+        bool:true,
+        message:"Something went wrong please refresh the page !"
       });
-    } catch (error) {
-      console.log(error);
-    }
+    })
+
+    console.log("refreshing");
   }, [changer]);
 
   const cancelOnSummary = () => {
@@ -100,11 +116,11 @@ function Booking() {
         </div>
       ) : null}
       {pendingRoomDetails ? (
-        <div className="row mb-4 g-3 justify-content-around">
+        <div className="row mb-4 g-3 justify-content-around p-2">
+          <div className="col-10 table-responsive col-md-12">
           <p className="alert alert-warning h1">
             Your Booking rooms is pending.
           </p>
-          <div className="col-10 table-responsive col-md-12">
             <Table roomDetail={pendingRoomDetails ? pendingRoomDetails : []} />
           </div>
           <div>
@@ -133,16 +149,32 @@ function Booking() {
         <OrderSummary roomDetail={pendingRooms} homeDiv={cancelOnSummary} />
       ) : null}
       {bookedRoom ? (
-        <div className="row">
+        <div className="row p-1">
           <div className="col table-responsive">
             <p className="alert alert-success h1">Booked rooms.</p>
+            <div className="col-12  mb-3 d-flex justify-content-end">
+              <button
+                onClick={(e) => {
+                  e.target.innerText = "REFRESHING....";
+                  e.target.disabled = true;
+                  setChanger(!changer);
+                  setTimeout(() => {
+                    e.target.innerText = "REFRESH";
+                    e.target.disabled = false;
+                  }, 2000);
+                }}
+                className="btn btn-success refresfBTN"
+              >
+                REFRESH
+              </button>
+            </div>
             <Table roomDetail={bookedRoom ? bookedRoom : []} />
           </div>
         </div>
       ) : null}
-      {noRooms ? (
+      {noRooms.bool ? (
         <div className="row">
-          <p className="h1 text-center">You are not booking any rooms !</p>
+          <p className="h1 text-center">{noRooms.message}</p>
         </div>
       ) : null}
     </div>

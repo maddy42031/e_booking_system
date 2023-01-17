@@ -4,7 +4,7 @@
   "description": "",
   "private": true,
   "scripts": {
-    "dev": "npm-run-all -p backend",
+    "dev": "npm-run-all -p frontend backend",
     "backend": "nodemon index.js",
     "frontend": "webpack --watch",
     "build": "webpack",

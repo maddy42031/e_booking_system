@@ -49,9 +49,6 @@ async function isExistUser(req, res) {
 admin.post("/", function (req, res) {
   isExistUser(req, res).then((val) => {
     if (val.isExist) {
-      // res
-      //   .cookie("token", "abcd", { path: "/user-rooms" })
-      //   .redirect("/user-rooms");
       activateRooms(val.data.userID).then(() => {
         res.send("Room has been activated !");
       });

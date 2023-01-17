@@ -16,10 +16,11 @@ async function cancelRoomsDatas(userId, roomsNo) {
           checkout: "",
           roomType: "",
           isPending: false,
-          price:0,
-          password:0,
-          isBooked:false,
-          isActive:false,
+          price: 0,
+          password: 0,
+          isBooked: false,
+          isActive: false,
+          pswdActive: false,
         },
       };
       await user.updateOne(roomFilter, updateRoomDoc);

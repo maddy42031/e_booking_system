@@ -13,6 +13,7 @@ function Col({ countOfElement, RoomNo }) {
     });
   }, []);
   const gettingRoomno = (e) => {
+    console.log(e.target.name);
     RoomNo(e.target.name);
   };
   return (
@@ -24,9 +25,12 @@ function Col({ countOfElement, RoomNo }) {
             key={val}
           >
             <p className="h6 text-center">{val}</p>
-            <button className="btn" onClick={gettingRoomno} name={val}>
-              <img src="/Public/door-closed.png" name={val} width={100} />
-            </button>
+            <button
+              className={`door-close btn`}
+              id={`door-${val}`}
+              onClick={gettingRoomno}
+              name={val}
+            ></button>
           </div>
         );
       })}
@@ -52,7 +56,7 @@ function Rooms() {
       ) : null}
       <div className="container">
         <p className="h1 text-center mb-4">User-Rooms</p>
-        <div className="row row-cols-4 g-3">
+        <div className="row row-cols-4 g-3 mb-5">
           <Col countOfElement={20} RoomNo={giveRoomNo} />
         </div>
       </div>
@@ -86,12 +90,14 @@ function FormPSWD({ NO, BackToRoom }) {
       .then((data) => {
         const IS_ALL_OK = data.data;
         const err = document.querySelector(".heading");
+        console.log(IS_ALL_OK);
         if (IS_ALL_OK.forRoom && IS_ALL_OK.forPswd) {
-          err.classList.add("text-success");
-          err.innerHTML = `OK`;
-          e.target[1].disabled = false;
-          e.target[2].disabled = false;
-        } else if (!IS_ALL_OK.forRoom) { // this is for checking git branch
+          document
+            .getElementById(`door-${NO}`)
+            .classList.replace("door-close", "door-open");
+          BackToRoom();
+        } else if (!IS_ALL_OK.forRoom) {
+          // this is for checking git branch
           err.classList.add("text-danger");
           err.innerHTML = `😶 THIS ROOM IS NOT ACTIVATED`;
           e.target[1].disabled = false;
@@ -134,7 +140,7 @@ function FormPSWD({ NO, BackToRoom }) {
             </button>
             <button
               style={{ marginLeft: ".5rem" }}
-              onClick={() => BackToRoom()}
+              onClick={() => BackToRoom(NO)}
               className="btn btn-danger"
             >
               CANCEL

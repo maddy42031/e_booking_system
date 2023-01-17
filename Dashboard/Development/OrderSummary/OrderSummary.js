@@ -79,14 +79,50 @@ export function Table({ roomDetail }) {
         e.target.disabled = false;
       });
   };
+  const disActive = (e, room) => {
+    console.log("DISACTIVE");
+    e.target.innerHTML = "PLEASE WAIT...";
+    e.target.disabled = true;
+    axios.put("/disactive", { roomNO: room.roomNo }).then((data) => {
+      console.log(data.data);
+      if (data.data) {
+        e.target.disabled = false;
+        e.target.name = "DISACTIVE";
+        e.target.innerHTML = `ROOM IS DISACTIVE`;
+      } else {
+        e.target.disabled = false;
+        e.target.name = "DISACTIVE";
+        e.target.innerHTML = `ROOM IS DISACTIVE`;
+      }
+    })
+  };
+  const Active = (e, room) => {
+    console.log("ACTIVE");
+    e.target.innerHTML = "PLEASE WAIT...";
+    e.target.disabled = true;
+    axios.put("/active", { roomNO: room.roomNo }).then((data) => {
+      console.log(data.data);
+      if (data.data) {
+        e.target.disabled = false;
+        e.target.name = "ACTIVE";
+        e.target.innerHTML = `ROOM IS ACTIVE`;
+      } else {
+        e.target.disabled = false;
+        e.target.name = "ACTIVE";
+        e.target.innerHTML = `ROOM IS ACTIVE`;
+      }
+    });
+  };
   return (
     <>
       <table className="table-bordered table ">
         <thead className="table-dark">
           <tr>
-            <th scope="col">NO</th>
+            <th className="text-center" scope="col">
+              NO
+            </th>
             {Object.keys(roomDetail[0])?.map((data, i) => (
-              <th scope="col" key={i}>
+              <th scope="col" className="text-center" key={i}>
                 {data.toUpperCase()}
               </th>
             ))}
@@ -98,7 +134,7 @@ export function Table({ roomDetail }) {
               <tr className={`cancelRow${index}`} key={index}>
                 <th scope="row">{index + 1}</th>
                 {Object.values(val).map((values, iVal) => {
-                  if (values == 'btn' ) {
+                  if (values == "btn") {
                     return (
                       <td key={iVal} className="d-flex justify-content-center">
                         <button
@@ -115,23 +151,38 @@ export function Table({ roomDetail }) {
                   if (values.pswd) {
                     const FFour = String(values.pswd).slice(0, 4);
                     const LFour = String(values.pswd).slice(4, 8);
-                    return <td key={iVal}>{`${FFour}-${LFour}`}</td>;
-                  }
-                  if (values == "YES") {
                     return (
-                      <td key={iVal} className="text-success fw-bold">
+                      <td
+                        key={iVal}
+                        className="text-center"
+                      >{`${FFour}-${LFour}`}</td>
+                    );
+                  }
+                  if (values.isOpen == "YES") {
+                    return (
+                      <td key={iVal} className="fw-bold text-center">
                         <button
-                          onClick={(e) =>
-                            cancelRoom(e, roomDetail[index], index)
-                          }
-                          className="btn btn-info"
+                          onClick={(e) => {
+                            const name = e.target.name;
+                            if (name == "ACTIVE") {
+                              disActive(e, roomDetail[index]);
+                            } else {
+                              Active(e, roomDetail[index], index);
+                            }
+                          }}
+                          className="btn btn-success"
+                          name={values.name}
                         >
-                          ACTIVATE ROOM 
+                          {values.name}
                         </button>
                       </td>
                     );
                   }
-                  return <td key={iVal}>{String(values).toUpperCase()}</td>;
+                  return (
+                    <td className="text-center" key={iVal}>
+                      {String(values).toUpperCase()}
+                    </td>
+                  );
                 })}
               </tr>
             );
