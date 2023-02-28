@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import io from "socket.io-client";
+
+const socket = io();
+
 function OrderSummary({ roomDetail, homeDiv }) {
   const [sucessMessage, SetMessage] = useState(false);
   const backHome = () => {
@@ -88,13 +92,17 @@ export function Table({ roomDetail }) {
       if (data.data) {
         e.target.disabled = false;
         e.target.name = "DISACTIVE";
-        e.target.innerHTML = `ROOM IS DISACTIVE`;
+        e.target.innerHTML = `NOT ACTIVE`;
+        socket.emit("message",{
+          no:String(room.roomNo),
+          isActive:false,
+        });
       } else {
         e.target.disabled = false;
         e.target.name = "DISACTIVE";
-        e.target.innerHTML = `ROOM IS DISACTIVE`;
+        e.target.innerHTML = `NOT ACTIVE`;
       }
-    })
+    });
   };
   const Active = (e, room) => {
     console.log("ACTIVE");
@@ -105,16 +113,30 @@ export function Table({ roomDetail }) {
       if (data.data) {
         e.target.disabled = false;
         e.target.name = "ACTIVE";
-        e.target.innerHTML = `ROOM IS ACTIVE`;
+        e.target.innerHTML = `ACTIVE`;
+        socket.emit("message",{
+          no:String(room.roomNo),
+          isActive:true,
+        });
       } else {
         e.target.disabled = false;
         e.target.name = "ACTIVE";
-        e.target.innerHTML = `ROOM IS ACTIVE`;
+        e.target.innerHTML = `ACTIVE`;
       }
     });
   };
+  useEffect(() => {
+    socket.on("connect", function () {
+      console.log("connected");
+    });
+    return () => {
+      socket.off("connect");
+    };
+  }, []);
+
   return (
     <>
+
       <table className="table-bordered table ">
         <thead className="table-dark">
           <tr>

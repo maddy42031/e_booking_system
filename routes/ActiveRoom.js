@@ -1,7 +1,6 @@
 const express = require("express");
 const ActiveRoom = express.Router();
 const DB = require("./mongodb");
-
 async function activeRoom(roomNO) {
   const client = DB();
   try {
@@ -29,7 +28,7 @@ async function activeRoom(roomNO) {
   }
 }
 
-ActiveRoom.put("/", function (req, res) {
+ActiveRoom.put("/active", function (req, res) {
   activeRoom(req.body.roomNO)
     .then((data) => {
       res.send(data);

@@ -50,7 +50,7 @@ admin.post("/", function (req, res) {
   isExistUser(req, res).then((val) => {
     if (val.isExist) {
       activateRooms(val.data.userID).then(() => {
-        res.send("Room has been activated !");
+        res.redirect("/user-rooms")
       });
     } else {
       res.render("error",{

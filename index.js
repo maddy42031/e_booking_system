@@ -15,13 +15,20 @@ const payment = require("./routes/payment");
 const bodyParser = require("body-parser");
 const admin = require("./routes/admin");
 const activateRoom = require("./routes/activateRoom");
-const ActiveRoom = require('./routes/ActiveRoom');
-const DisActiveRoom = require('./routes/DisActiveRoom');
+const ActiveRoom = require("./routes/ActiveRoom");
+const DisActiveRoom = require("./routes/DisActiveRoom");
+const Profile = require("./routes/profile");
+const deleteAccount = require("./routes/deleteAc");
+const http = require("http");
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
 const { MongoClient } = require("mongodb");
 const DB = require("./routes/mongodb");
 
 // coming traditional HTML form submits
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(__dirname + "/node_modules"));
 
 // Serving Static JavaScript files
 app.use(
@@ -78,8 +85,10 @@ app.use("/user-rooms", function (req, res) {
   res.sendFile(path.resolve(__dirname, "user-rooms/production/index.html"));
 });
 app.use("/", activateRoom);
-app.use("/active",ActiveRoom);
-app.use("/disactive",DisActiveRoom)
+app.use("/", ActiveRoom);
+app.use("/disactive", DisActiveRoom);
+app.use("/get-profile", Profile);
+app.use("/delete-ac",deleteAccount);
 // Error page
 app.use((req, res, next) => {
   res.status(404).render("error", {
@@ -90,6 +99,16 @@ app.use((req, res, next) => {
     backToContent: "Back To HomePage",
   });
 });
+
+//  Connection with socket.io
+io.on("connection", function (socket) {
+  console.log("Client connected...");
+  socket.on("message", (msg) => {
+    console.log(msg);
+    io.emit("active", msg);
+  });
+});
+
 async function run() {
   const client = DB();
   try {
@@ -110,7 +129,7 @@ async function run() {
         isPending: false,
         price: 0,
         activateRoom: false,
-        pswdActive:false,
+        pswdActive: false,
       };
       const setDoc = await col.insertOne(doc);
       console.log(setDoc);
@@ -123,4 +142,4 @@ async function run() {
 }
 // run().catch(console.dir);
 
-app.listen(process.env.PORT || 4000);
+server.listen(process.env.PORT || 4000);

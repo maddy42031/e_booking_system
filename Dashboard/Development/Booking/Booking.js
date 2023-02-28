@@ -12,7 +12,7 @@ function parseBookingDetails(BookingData) {
         active_rooms:
           data.isActive || data.pswdActive
             ? {
-                name: data.isActive ? "ACTIVE" : "DISACTIVE",
+                name: data.isActive ? "ACTIVE" : "NOT ACTIVE",
                 isOpen: "YES",
               }
             : "NO",
@@ -101,11 +101,15 @@ function Booking() {
       setChanger(!changer);
       setPending(false);
     }
-    console.log(data);
   };
 
   return (
     <div className="container-fluid mt-4">
+      {noRooms.bool ? (
+        <div className="row">
+          <p className="h1 text-center">{noRooms.message}</p>
+        </div>
+      ) : null}
       {loader ? (
         <div className="text-center mt-5">
           <div
@@ -172,11 +176,7 @@ function Booking() {
           </div>
         </div>
       ) : null}
-      {noRooms.bool ? (
-        <div className="row">
-          <p className="h1 text-center">{noRooms.message}</p>
-        </div>
-      ) : null}
+      
     </div>
   );
 }

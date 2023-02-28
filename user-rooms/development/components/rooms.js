@@ -1,5 +1,18 @@
 import React, { useState, useEffect } from "react";
+import io from "socket.io-client";
 import axios from "axios";
+const socket = io();
+socket.on("active", (data) => {
+  if (data.isActive) {
+    document
+      .getElementById(`door-${data.no}`)
+      .classList.replace("door-close", "door-open");
+  } else {
+    document
+      .getElementById(`door-${data.no}`)
+      .classList.replace("door-open", "door-close");
+  }
+});
 function Col({ countOfElement, RoomNo }) {
   const [count, setCount] = useState(undefined);
   useEffect(() => {
@@ -44,6 +57,7 @@ function Rooms() {
     setRoomNo(no);
     hidden(true);
   };
+
   return (
     <>
       {visible ? (

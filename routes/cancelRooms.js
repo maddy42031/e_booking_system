@@ -19,6 +19,7 @@ async function cancelRoomsDatas(userId, roomsNo) {
           price: 0,
           password: 0,
           isBooked: false,
+          activateRoom: false,
           isActive: false,
           pswdActive: false,
         },

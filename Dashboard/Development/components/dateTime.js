@@ -26,7 +26,6 @@ function DateAndTime() {
   const [checkin, setCheckin] = useState("");
   const [checkout, setCheckout] = useState("");
   const [DateArr, setDateArr] = useState();
-  const [err, setError] = useState(false);
   const Month = [
     "Jan",
     "Feb",
@@ -45,23 +44,12 @@ function DateAndTime() {
     DatesTimes();
   }, []);
   useEffect(() => {
-    const a = checkin.split("-");
-    const b = checkout.split("-");
-    const monthCheck = Month.indexOf(a[0]) + 1 < Month.indexOf(b[0]) + 1;
-    const dateCheck = Number(a[1]) > Number(b[1]);
-    const yearCheck = Number(a[2]) > Number(b[2]);
-    if (monthCheck || dateCheck || yearCheck) {
-      setError(true);
-    } else {
-      setError(false);
-      submit.setDate({
-        checkin: checkin,
-        checkout: checkout,
-      });
-      console.log(checkin, checkout);
-    }
+    submit.setDate({
+      checkin: checkin,
+      checkout: checkout,
+    });
   }, [checkin, checkout]);
-  
+
   const DatesTimes = async () => {
     const currentDate = new Date();
     const nextOneMonth = new Date();
@@ -158,11 +146,6 @@ function DateAndTime() {
           <Option2 dates={DateArr} />
         </select>
       </div>
-      {err ? (
-        <div className="alert alert-danger" role="alert">
-          Check the Date it is equal or checkin greater than checkout.
-        </div>
-      ) : null}
     </div>
   );
 }
