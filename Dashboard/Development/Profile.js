@@ -5,7 +5,9 @@ function Profile() {
   const [userDetails, setDetail] = useState();
   const [tableLoader, Loader] = useState(true);
   const clearCookie = (e) => {
-    e.target.disabled = true;
+    if (e) {
+      e.target.disabled = true;
+    }
     const date = new Date();
     document.cookie = `token =; Path=/; Expires= ${date.toUTCString()}`;
     document.cookie = `userId =; Path=/; Expires= ${date.toUTCString()}`;
@@ -14,13 +16,19 @@ function Profile() {
     a.click();
   };
   const deleteAccount = (e) => {
-    e.target.disabled = true;
-    axios
-      .delete("/delete-ac")
-      .catch((err) => console.log(err))
-      .then((data) => {
-        console.log(data.data);
-      });
+    let alertMsg = confirm("Are you sure to delete your account");
+    if (alertMsg) {
+      e.target.disabled = true;
+      axios
+        .delete("/delete-ac")
+        .catch((err) => console.log(err))
+        .then((data) => {
+          clearCookie();
+          console.log(data.data);
+        });
+    } else {
+      return;
+    }
   };
   useEffect(() => {
     axios

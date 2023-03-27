@@ -44,6 +44,9 @@ app.use("/public", express.static(path.resolve(__dirname, "Public")));
 // Serving image files
 app.use("/images", express.static(path.resolve(__dirname, "images")));
 
+// Serving CheckingInternet
+app.use("/internetCheck", express.static(path.resolve(__dirname, "InternetCheck")));
+
 // Setting view engine EJS
 app.engine(".html", require("ejs").__express);
 app.set("view engine", "html");
@@ -88,9 +91,10 @@ app.use("/", activateRoom);
 app.use("/", ActiveRoom);
 app.use("/disactive", DisActiveRoom);
 app.use("/get-profile", Profile);
-app.use("/delete-ac",deleteAccount);
+app.use("/delete-ac", deleteAccount);
 // Error page
 app.use((req, res, next) => {
+  // console.log(res.redirect(""))
   res.status(404).render("error", {
     title: "Not Found",
     heading: "ERROR 404 FOUND !",
